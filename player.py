@@ -17,8 +17,10 @@ card_values = {
 			}
 
 class Player:
-	def __init__(self):
+	def __init__(self, player_name, wallet):
 		self.hand = pydealer.Stack()
+		self.name = player_name
+		self.wallet = wallet
 
 	def hand_value(self):
 		# Take in a pydealer.Stack, and return the Blackjack value of the hand. 
@@ -46,7 +48,7 @@ class Player:
 			return total
 
 	def has_natural(self):
-		if self.hand.size == 2 and hand_value(self.hand) == 21:
+		if self.hand.size == 2 and self.hand_value() == 21:
 			return True
 		else:
 			return False
@@ -54,8 +56,8 @@ class Player:
 
 # Make dealer class a subclass of Player class
 class Dealer(Player):
-	def __init__(self):
-		self.hand = pydealer.Stack()
+	def __init__(self, player_name):
+		super().__init__(player_name, 0)
 
 	def hit(self):
 		if self.hand_value() < 17:
