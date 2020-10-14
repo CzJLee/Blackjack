@@ -1,0 +1,28 @@
+{
+	"dealer": [["7", "Clubs"], ["5", "Hearts"], ["3", "Clubs"], ["4", "Spades"]],
+	"dealerValue": 19,
+	"hand": [["Ace", "Spades"], ["5", "Diamonds"]],
+	"handValue": 16,
+	"numAces": 1,
+	"stand": "lose",
+	"hit": {
+		"card": ["8", "Hearts"],
+		"bust": false,
+		"handValue": 14,
+		"numAces": 1,
+		"stand": "lose",
+		"hit": {
+			"card": ["6", "Diamonds"],
+			"bust": false,
+			"handValue": 20,
+			"numAces": 1,
+			"stand": "win",
+			"hit": {
+				"card": ["Queen", "Hearts"],
+				"bust": true,
+				"handValue": 30,
+				"numAces": 1
+			}
+		}
+	}
+}
