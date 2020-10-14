@@ -1,6 +1,10 @@
 import pydealer
+from time import sleep
 
 from player import Player, Dealer
+
+suits_char = {"Spades": "♠", "Hearts": "♥", "Diamonds": "♦", "Clubs": "♣"}
+values_char = {"2": "2", "3": "3", "4": "4", "5": "5", "6": "6", "7": "7", "8": "8", "9": "9", "10": "10", "Jack": "J", "Queen": "Q", "King": "K", "Ace": "A"}
 
 class Blackjack:
 	def __init__(self, players = [], shoe_size = 1):
@@ -45,33 +49,48 @@ class Blackjack:
 
 	def set_cards(self, player, cards):
 		# Set the hand to be cards. All other cards in hand are removed.
-		player.set_cards(cards)
+		player.hand.set_cards(cards)
 
-	# def check_natural(self, player):
-	# 	# Return a list of players with natural 21
-	# 	naturals = []
+	def check_natural(self, dealer, players):
+		# Return a list of players with natural 21
+		naturals = []
 
-	# 	# Check if dealer has natural 21
-	# 	if self.dealer.has_natural():
-	# 		naturals.append(self.dealer)
+		# Check if dealer has natural 21
+		if dealer.has_natural():
+			naturals.append(dealer)
 		
-	# 	# Check if player has natural 21
-	# 	if player.has_natural():
-	# 		naturals.append(player)
+		# Check if player has natural 21
+		for player in players:
+			if player.has_natural():
+				naturals.append(player)
 
-	# 	return naturals
+		return naturals
 
-	def hit(self, player):
-		player.hand += self.deck.deal(1)
+	def print_hands(self, player):
+		# Prints the dealers and players current hand. 
+
+		# Print dealers hand, hiding second card.
+		print(f"Dealer's Hand: {values_char[self.dealer.hand.cards[0].value]}{suits_char[self.dealer.hand.cards[0].suit]}, ??")
+
+		# Make a list of all the players cards
+		hand_text = []
+		for card in player.hand.cards:
+			hand_text.append(f"{values_char[card.value]}{suits_char[card.suit]}")
+		hand_text_str = ", ".join(hand_text)
+		# Print players hand
+		print(f"Player's Hand: {hand_text_str}")
+
+		# Print players hand_value
+		print(f"Players's Hand Value: {player.hand_value()}")
 
 	def new_round(self, dealer, players):
 		# Expect players to be a list of class Player
 
 		# Create results list. Results will have the same number of elements as players, and each result matches a player. 
-		results = [1 for player in players]
+		results = [0 for player in players]
 		# After the round has ended, return results. The value inside results is the payout to the player. 
 		# 0 indicates that the player lost, and is paid nothing. 
-		# 1 is a placeholder, and no scenario should return a 1. A 1 will return the players original bet. 
+		# 1 indicates a tie. A 1 will return the players original bet. 
 		# 2 indicates that a player beat the dealer, and the player is paid out equal to their original bet.
 		# 2.5 indicates that the player beat the dealer and got a natural 21. 
 
@@ -88,6 +107,40 @@ class Blackjack:
 			self.deal_card(dealer)
 
 		# Immediately after cards are dealt, check if anyone has a natural 21. 
+		naturals = self.check_natural(dealer, players)
+		if naturals:
+			# Someone has a natural 21
+			if isinstance(naturals[0], Dealer):
+				# Dealer has a natural 21
+				# The round is over. 
+				# If any player also has a natural, they will tie. All other players lose. 
+				results = [1 if player in naturals else 0 for player in players]
+				return results
+			else:
+				# Only players have a natural 21
+				# The round does not end. 
+				results = [2.5 if player in naturals else 0 for player in players]
+		
+		# It is now the players turn. 
+		# Go one player at a time. 
+		for player in players:
+			if player.has_pair():
+				# Give player the option to split
+				pass
+			
+			player_turn = True
+			while player.hand_value() < 21 and player_turn:
+				get_player_input = True
+				# Ask whether to hit or stand as long as get_player_input is true. 
+				while get_player_input:
+					player_input = input("Hit or Stand?: ")
+					if player_input in ["h", "H", "hit", "Hit", "HIT"]:
+						self.deal_card()(player)
+						get_player_input = False
+					elif player_input in ["s", "S", "stand", "Stand", "STAND"]:
+						get_player_input = False
+						# Players Turn is over
+						player_turn = False
 
 
 
