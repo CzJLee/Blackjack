@@ -11,6 +11,7 @@ The goal of this project is to build a working text based Blackjack game, using 
 	- [Dependencies](#dependencies)
 	- [How to Play](#how-to-play)
 	- [Questions I Want To Answer](#questions-i-want-to-answer)
+	- [Object Layout](#object-layout)
 
 ## Basic Rules
 While most Blackjack rules are standard, some rules may vary. Here is a brief description of the rules that might be specific to this version. 
@@ -26,7 +27,7 @@ If the player gets a natural 21 and the dealer does not, the dealer pays out 1.5
 If the player loses against the dealer, the player loses their original bet. 
 
 ### Dealer's Play
-The dealer is dealt one card face up, and one card face down. If the dealer is dealt a natural 21, then the round ends. Any player with a natural 21 will tie, all other players lose. 
+The dealer is dealt one card face up, and one card face down. The dealer immediately checks if they have a natural 21. If the dealer is dealt a natural 21, then the round ends. Any player with a natural 21 will tie, all other players lose. 
 
 The dealer will continue to take cards until their total is greater than or equal to 17. 
 
@@ -54,3 +55,14 @@ The main game is located in `play.py`.
 - What is the ideal move in each hand value situation?
 - Does a change in shoe size change these probabilities?
 - How do I format the data to answer all of these questions?
+
+## Object Layout
+class Blackjack is considered the poker table. At this table exists the dealer, the players, the deck of cards, and the round that is being played. 
+
+The table controls the deck of cards. 
+
+The table controls the dealer.
+
+The players join the table. 
+
+The Blackjack class can create a new Round instance. The table can pass cards to the players in the round. 
