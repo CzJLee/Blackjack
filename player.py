@@ -53,6 +53,11 @@ class Player:
 		else:
 			return False
 
+	def has_pair(self):
+		if self.hand.size == 2 and card_values[self.hand.cards[0].value] == card_values[self.hand.cards[1].value]:
+			return True
+		else: 
+			return False
 
 # Make dealer class a subclass of Player class
 class Dealer(Player):
