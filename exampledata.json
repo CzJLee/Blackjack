@@ -1,0 +1,20 @@
+{
+	"dealer": [["Jack", "Clubs"], ["8", "Hearts"]],
+	"hand": [["Ace", "Spades"], ["5", "Diamonds"]],
+	"handValue": 16,
+	"hit": {
+		"bust": 5,
+		"hit": {
+			"card": ["2", "Hearts"],
+			"handValue": 18
+		},
+		"stand": {
+			"wins": 8,
+			"losses": 7
+		}
+	},
+	"stand": {
+		"wins": 5,
+		"losses": 9
+	}
+}
