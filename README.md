@@ -10,6 +10,7 @@ The goal of this project is to build a working text based Blackjack game, using 
 		- [Optional Rules](#optional-rules)
 	- [Dependencies](#dependencies)
 	- [How to Play](#how-to-play)
+	- [Questions I Want To Answer](#questions-i-want-to-answer)
 
 ## Basic Rules
 While most Blackjack rules are standard, some rules may vary. Here is a brief description of the rules that might be specific to this version. 
@@ -43,3 +44,13 @@ Blackjack uses [pydealer](https://github.com/Trebek/pydealer) to handle card and
 The main game is located in `play.py`. 
 
 ```python3 play.py```
+
+## Questions I Want To Answer
+
+- What is the probability of getting dealt a natural 21?
+- If you hit with a hand value of x, what is the probability of busting? 
+- If you stand with a hand value of x, what is the probability of winning?
+- If you have a pair of x, should you split?
+- What is the ideal move in each hand value situation?
+- Does a change in shoe size change these probabilities?
+- How do I format the data to answer all of these questions?
