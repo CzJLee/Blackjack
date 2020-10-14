@@ -66,11 +66,12 @@ class Blackjack:
 
 		return naturals
 
-	def print_hands(self, player):
-		# Prints the dealers and players current hand. 
-
+	def print_hand_dealer(self):
 		# Print dealers hand, hiding second card.
 		print(f"Dealer's Hand: {values_char[self.dealer.hand.cards[0].value]}{suits_char[self.dealer.hand.cards[0].suit]}, ??")
+
+	def print_hand(self, player):
+		# Prints the players current hand. 
 
 		# Make a list of all the players cards
 		hand_text = []
@@ -78,16 +79,18 @@ class Blackjack:
 			hand_text.append(f"{values_char[card.value]}{suits_char[card.suit]}")
 		hand_text_str = ", ".join(hand_text)
 		# Print players hand
-		print(f"Player's Hand: {hand_text_str}")
+		print(f"{player.name}'s Hand: {hand_text_str}")
 
 		# Print players hand_value
-		print(f"Players's Hand Value: {player.hand_value()}")
+		print(f"{player.name}'s Hand Value: {player.hand_value()}")
 
-	def new_round(self, dealer, players):
+	def new_round(self):
+		dealer = self.dealer
+		players = self.players
 		# Expect players to be a list of class Player
 
 		# Create results list. Results will have the same number of elements as players, and each result matches a player. 
-		results = [0 for player in players]
+		results = []
 		# After the round has ended, return results. The value inside results is the payout to the player. 
 		# 0 indicates that the player lost, and is paid nothing. 
 		# 1 indicates a tie. A 1 will return the players original bet. 
@@ -100,6 +103,7 @@ class Blackjack:
 			self.empty_hand(player)
 
 		# Deal new cards to dealer and players. 
+		print("Dealing cards...")
 		# Start with players, then dealer. Deal cards one at a time. 
 		for i in range(2):
 			for player in players:
@@ -112,14 +116,15 @@ class Blackjack:
 			# Someone has a natural 21
 			if isinstance(naturals[0], Dealer):
 				# Dealer has a natural 21
+				print("Dealer has a natural 21. The round is over.")
 				# The round is over. 
 				# If any player also has a natural, they will tie. All other players lose. 
 				results = [1 if player in naturals else 0 for player in players]
 				return results
-			else:
-				# Only players have a natural 21
-				# The round does not end. 
-				results = [2.5 if player in naturals else 0 for player in players]
+			# else:
+			# 	# Only players have a natural 21
+			# 	# The round does not end. 
+			# 	results = [2.5 if player in naturals else 0 for player in players]
 		
 		# It is now the players turn. 
 		# Go one player at a time. 
@@ -127,25 +132,59 @@ class Blackjack:
 			if player.has_pair():
 				# Give player the option to split
 				pass
+
+			self.print_hand_dealer()
+			self.print_hand(player)
 			
-			player_turn = True
+			player_turn = not player.has_natural()
+			# player_turn is False if he player has a natural 21. 
 			while player.hand_value() < 21 and player_turn:
 				get_player_input = True
 				# Ask whether to hit or stand as long as get_player_input is true. 
 				while get_player_input:
 					player_input = input("Hit or Stand?: ")
 					if player_input in ["h", "H", "hit", "Hit", "HIT"]:
-						self.deal_card()(player)
+						self.deal_card(player)
 						get_player_input = False
 					elif player_input in ["s", "S", "stand", "Stand", "STAND"]:
 						get_player_input = False
 						# Players Turn is over
 						player_turn = False
 
-
-
-# class Round():
-# 	def __init__(self, dealer, players):
-# 		# expect dealer to be class Dealer
-# 		# expect players to be a list of class Player
+				self.print_hand_dealer()
+				self.print_hand(player)
+			
+			# If player.hand_value() > 21, they bust.
+			if player.hand_value() > 21:
+				print("Player Busts!")
 		
+		# All players have finished their turn. 
+		# Dealers turn now. 
+		print("All players have finished their turn.")
+		print("Dealer's turn...")
+		while dealer.hit():
+			self.deal_card(dealer)
+		self.print_hand(dealer)
+
+		print("Determining winners...")
+		for player in players:
+			if player.has_natural():
+				# Player got natural 21, set result = 2.5
+				results.append(2.5)
+			elif player.hand_value() > 21:
+				# Player busts, set result = 0
+				results.append(0)
+			elif dealer.hand_value() > 21:
+				# Dealer busts, set result = 2
+				results.append(2)
+			elif player.hand_value() > dealer.hand_value():
+				# Player beat dealer, set result = 2
+				results.append(2)
+			elif player.hand_value() < dealer.hand_value():
+				# Player loses to dealer, set result = 0
+				results.append(0)
+			elif player.hand_value() == dealer.hand_value():
+				# player ties dealer, set result = 1
+				results.append(1)
+		
+		return results
